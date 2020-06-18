@@ -1,33 +1,32 @@
 import React from "react";
-import { useSelector, TypedUseSelectorHook } from "react-redux";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
-import { State } from "../../../ducks/places";
+import Button from "../../../shared/components/UIElements/Button";
+import { RootState } from "../../../reducers";
 import Card from "../../../shared/components/UIElements/Card";
 import PlaceItem from "../PlaceItem";
 import styles from "./style.module.scss";
 
-interface CurrentState {
-  places: State;
-}
-
 const PlaceList: React.FC = () => {
-  const typedUseSelector: TypedUseSelectorHook<CurrentState> = useSelector;
-
-  const placesList = typedUseSelector((state) => state.places.placesList);
-
-  if (placesList.length === 0) {
+  const userId = useParams<{ userId: string }>().userId;
+  const placesList = useSelector((state: RootState) => state.places.placesList);
+  const currentUserPlaces = placesList.filter(
+    (place) => place.creator === userId
+  );
+  if (currentUserPlaces.length === 0) {
     return (
       <div className={`${styles.placeList} center`}>
-        <Card>
+        <Card style={{ padding: "1rem" }}>
           <h2>No places found. Maybe create one?</h2>
-          <button>Share place</button>
+          <Button to="/places/new">Share place</Button>
         </Card>
       </div>
     );
   }
   return (
     <ul className={styles.placeList}>
-      {placesList.map((place) => (
+      {currentUserPlaces.map((place) => (
         <PlaceItem
           key={place.id}
           id={place.id}

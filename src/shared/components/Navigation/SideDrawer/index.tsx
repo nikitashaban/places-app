@@ -4,9 +4,9 @@ import { CSSTransition } from "react-transition-group";
 
 import styles from "./style.module.scss";
 
-type SideDrawerProps = {
+interface SideDrawerProps {
   show: boolean;
-};
+}
 
 const SideDrawer: React.FC<SideDrawerProps> = ({ children, show }) => {
   const content = (

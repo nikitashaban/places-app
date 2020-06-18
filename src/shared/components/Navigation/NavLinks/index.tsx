@@ -1,9 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
+import { setIsUserLogged } from "../../../../ducks/users";
+import { RootState } from "../../../../reducers";
 import styles from "./style.module.scss";
 
 const NavLinks: React.FC = () => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.users.isLoggedIn);
   return (
     <ul className={styles.navLinks}>
       <li>
@@ -12,20 +17,33 @@ const NavLinks: React.FC = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink activeClassName={styles.activeNavLinks} to="/1/places">
-          MY PLACES
-        </NavLink>
+        {isLoggedIn && (
+          <NavLink activeClassName={styles.activeNavLinks} to="/1/places">
+            MY PLACES
+          </NavLink>
+        )}
       </li>
       <li>
-        <NavLink activeClassName={styles.activeNavLinks} to="/places/new">
-          ADD PLACE
-        </NavLink>
+        {isLoggedIn && (
+          <NavLink activeClassName={styles.activeNavLinks} to="/places/new">
+            ADD PLACE
+          </NavLink>
+        )}
       </li>
       <li>
-        <NavLink activeClassName={styles.activeNavLinks} to="/auth">
-          AUTHENTICATE
-        </NavLink>
+        {!isLoggedIn && (
+          <NavLink activeClassName={styles.activeNavLinks} to="/auth">
+            AUTHENTICATE
+          </NavLink>
+        )}
       </li>
+      {isLoggedIn && (
+        <li>
+          <button onClick={() => dispatch(setIsUserLogged(false))}>
+            LOGOUT
+          </button>
+        </li>
+      )}
     </ul>
   );
 };

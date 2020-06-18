@@ -1,18 +1,14 @@
 import React from "react";
-import { useSelector, TypedUseSelectorHook } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Card from "../../../shared/components/UIElements/Card";
-import { State } from "../../../ducks/users";
+import { RootState } from "../../../reducers";
 import UserItem from "../UserItem/";
 import styles from "./style.module.scss";
 
-interface CurrentState {
-  users: State;
-}
-
 const UserList: React.FC = () => {
-  const typedUseSelector: TypedUseSelectorHook<CurrentState> = useSelector;
-  const usersList = typedUseSelector((state) => state.users.usersList);
+  const usersList = useSelector((state: RootState) => state.users.usersList);
+
   if (usersList.length === 0) {
     return (
       <div className="center">

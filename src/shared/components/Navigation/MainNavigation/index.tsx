@@ -9,7 +9,7 @@ import styles from "./style.module.scss";
 
 const MainNavigation: React.FC = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false);
-  console.log(drawerIsOpen);
+
   return (
     <React.Fragment>
       {drawerIsOpen && <Backdrop onClick={() => setDrawerIsOpen(false)} />}

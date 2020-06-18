@@ -1,5 +1,5 @@
 // const
-
+const SET_IS_USER_LOGGED = "SET_IS_USER_LOGGED";
 //initial state
 
 export interface UsersInterface {
@@ -10,6 +10,12 @@ export interface UsersInterface {
 }
 export type State = {
   usersList: Array<UsersInterface>;
+  isLoggedIn: boolean;
+};
+
+type Action = {
+  type: "SET_IS_USER_LOGGED";
+  payload: boolean;
 };
 const initialState: State = {
   usersList: [
@@ -21,11 +27,17 @@ const initialState: State = {
       places: 3,
     },
   ],
+  isLoggedIn: false,
 };
 
 //reducer
-export default (state = initialState, action: any): State => {
+export default (state = initialState, action: Action): State => {
   switch (action.type) {
+    case SET_IS_USER_LOGGED:
+      return {
+        ...state,
+        isLoggedIn: action.payload,
+      };
     default: {
       return state;
     }
@@ -33,5 +45,8 @@ export default (state = initialState, action: any): State => {
 };
 
 //actions
-
+export const setIsUserLogged = (payload: boolean) => ({
+  type: SET_IS_USER_LOGGED,
+  payload,
+});
 //action creators

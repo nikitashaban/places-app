@@ -1,14 +1,14 @@
 import React from "react";
 import styles from "./style.module.scss";
 
-type AvatarProps = {
+interface AvatarProps {
   className?: string;
   style?: object;
   image: string;
   alt: string;
   width?: number;
   height?: number;
-};
+}
 
 const Avatar: React.FC<AvatarProps> = ({
   className,

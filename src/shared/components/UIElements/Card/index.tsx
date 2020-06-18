@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./style.module.scss";
 
-type CardProps = {
+interface CardProps {
   style?: object;
-};
+  className?: string;
+}
 
-const ComponentName: React.FC<CardProps> = ({ style, children }) => {
+const ComponentName: React.FC<CardProps> = ({ style, children, className }) => {
   return (
-    <div className={`${styles.card}`} style={style}>
+    <div className={`${styles.card} ${className}`} style={style}>
       {children}
     </div>
   );
