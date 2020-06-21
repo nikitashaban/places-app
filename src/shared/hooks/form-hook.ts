@@ -1,6 +1,6 @@
 import { useReducer, useCallback } from "react";
 
-type FormStateType = {
+export type FormStateType = {
   inputs: {
     [key: string]: {
       value: string;
@@ -12,11 +12,11 @@ type FormStateType = {
 
 type Action =
   | {
-      type: "INPUT_CHANGE";
-      inputId: string;
-      isValid: boolean;
-      value: string;
-    }
+    type: "INPUT_CHANGE";
+    inputId: string;
+    isValid: boolean;
+    value: string;
+  }
   | { type: "SET_DATA"; inputs: FormStateType["inputs"]; isValid: boolean };
 
 const formReducer = (state: FormStateType, action: Action): FormStateType => {
@@ -58,10 +58,10 @@ export const useForm = (
   initialInputs: FormStateType["inputs"],
   initialFormValidity: boolean
 ): [
-  FormStateType,
-  (id: string, value: string, isValid: boolean) => void,
-  (inputData: any, formValidity: any) => void
-] => {
+    FormStateType,
+    (id: string, value: string, isValid: boolean) => void,
+    (inputData: any, formValidity: any) => void
+  ] => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,
     isValid: initialFormValidity,

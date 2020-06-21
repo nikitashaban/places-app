@@ -9,7 +9,7 @@ export interface PlacesInterface {
   description: string;
   address: string;
   creator: string;
-  location: { lat: number; lng: number };
+  location: [number, number];
 }
 export type State = {
   placesList: Array<PlacesInterface>;
@@ -24,7 +24,7 @@ const initialState: State = {
       creator: "1",
       description: "Interesting place",
       address: "Simferopol",
-      location: { lng: 34.24713134765626, lat: 44.555249259710656 },
+      location: [44.555249259710656, 34.24713134765626],
     },
     {
       id: "p2",
@@ -34,7 +34,7 @@ const initialState: State = {
       creator: "2",
       description: "Interesting place",
       address: "Simferopol",
-      location: { lng: 34.24713134765626, lat: 44.555249259710656 },
+      location: [44.555249259710656, 34.24713134765626],
     },
   ],
 };
