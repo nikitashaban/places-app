@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import ImageUpload from '../../../shared/components/UIElements/ImageUpload'
 import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_EMAIL,
@@ -41,6 +42,7 @@ const Auth: React.FC = () => {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -52,6 +54,10 @@ const Auth: React.FC = () => {
             value: "",
             isValid: false,
           },
+          image: {
+            value: null,
+            isValid: false
+          }
         },
         true
       );
@@ -80,6 +86,7 @@ const Auth: React.FC = () => {
               onInput={inputHandler}
             />
           )}
+          {!isLoginMode && <ImageUpload id="image" center onInput={inputHandler} errorText="Please upload correct file" />}
           <Input
             label="E-mail"
             id="email"

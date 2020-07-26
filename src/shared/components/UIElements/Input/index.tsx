@@ -25,10 +25,10 @@ type InputStateType = {
 
 type Action =
   | {
-      payload: string;
-      type: "CHANGE" | "TOUCH";
-      validators: { type: string; val?: number }[];
-    }
+    payload: string;
+    type: "CHANGE" | "TOUCH";
+    validators: { type: string; val?: number }[];
+  }
   | { type: "TOUCH" };
 
 const inputReducer = (
@@ -98,19 +98,19 @@ const Input: React.FC<InputProps> = ({
         value={inputState.value}
       />
     ) : (
-      <textarea
-        id={id}
-        onBlur={touchHandler}
-        rows={rows || 3}
-        onChange={changeHandler}
-        value={inputState.value}
-      />
-    );
+        <textarea
+          id={id}
+          onBlur={touchHandler}
+          rows={rows || 3}
+          onChange={changeHandler}
+          value={inputState.value}
+        />
+      );
   return (
     <div
       className={`${styles.formControl} ${
         !inputState.isValid && inputState.isTouched && styles.formControlInvalid
-      }`}
+        }`}
     >
       <label htmlFor={id}>{label}</label>
       {inputElement}

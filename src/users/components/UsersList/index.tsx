@@ -1,13 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 import Card from "../../../shared/components/UIElements/Card";
 import { RootState } from "../../../reducers";
 import UserItem from "../UserItem/";
 import styles from "./style.module.scss";
 
-const UserList: React.FC = () => {
-  const usersList = useSelector((state: RootState) => state.users.usersList);
+interface IUsersList {
+  usersList: RootState['users']['usersList']
+}
+
+const UserList: React.FC<IUsersList> = ({ usersList }) => {
 
   if (usersList.length === 0) {
     return (
@@ -26,7 +28,7 @@ const UserList: React.FC = () => {
           id={user.id}
           image={user.image}
           name={user.name}
-          placeCount={user.places}
+          placeCount={user.places.length}
         />
       ))}
     </ul>

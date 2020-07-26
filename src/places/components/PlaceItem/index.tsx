@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
+import ErrorModal from '../../../shared/components/UIElements/ErrorModal'
+import LoadingSpinner from '../../../shared/components/UIElements/LoadingSpinner'
 import { RootState } from "../../../reducers";
 import Modal from "../../../shared/components/UIElements/Modal";
 import Map from "../../../shared/components/UIElements/Map";
 import Card from "../../../shared/components/UIElements/Card";
-import { PlacesInterface } from "../../../ducks/places";
+import { PlacesInterface, deletePlace, setError } from "../../../ducks/places";
 import Button from "../../../shared/components/UIElements/Button";
 import styles from "./style.module.scss";
 
@@ -16,17 +18,21 @@ const PlaceItem: React.FC<PlacesInterface> = ({
   description,
   address,
   creator,
-  location,
+  coordinates,
 }) => {
+  const dispatch = useDispatch()
   const [showMap, setShowMap] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const isLoggedIn = useSelector((state: RootState) => state.users.isLoggedIn);
-  const confirmDeleteHandler = () => {
+  const { currentUser } = useSelector((state: RootState) => state.users);
+  const { error, isLoading } = useSelector((state: RootState) => state.places);
+  const confirmDeleteHandler = (placeId: string) => {
     setShowConfirmModal(false);
-    console.log("...deleting");
+    dispatch(deletePlace(placeId))
   };
+
   return (
     <React.Fragment>
+      <ErrorModal error={error} onClear={() => dispatch(setError(null))} />
       <Modal
         show={showMap}
         onCancel={() => setShowMap(false)}
@@ -35,7 +41,7 @@ const PlaceItem: React.FC<PlacesInterface> = ({
         footerClass={styles.placeItem__modalActions}
       >
         <div className={styles.mapContainer}>
-          <Map center={location} zoom={10} />
+          <Map center={coordinates} zoom={10} />
         </div>
       </Modal>
       <Modal
@@ -48,7 +54,7 @@ const PlaceItem: React.FC<PlacesInterface> = ({
             <Button onClick={() => setShowConfirmModal(false)} inverse>
               CANCEL
             </Button>
-            <Button onClick={confirmDeleteHandler} danger>
+            <Button onClick={() => confirmDeleteHandler(id)} danger>
               DELETE
             </Button>
           </React.Fragment>
@@ -61,8 +67,9 @@ const PlaceItem: React.FC<PlacesInterface> = ({
       </Modal>
       <li className={styles.placeItem}>
         <Card>
+          {isLoading && <LoadingSpinner asOverlay />}
           <div className={styles.placeItem__image}>
-            <img src={image} alt={title} />
+            <img src={`${process.env.REACT_APP_ASSET_URL}${image}`} alt={title} />
           </div>
           <div className={styles.placeItem__info}>
             <h2>{title}</h2>
@@ -73,8 +80,8 @@ const PlaceItem: React.FC<PlacesInterface> = ({
             <Button inverse={true} onClick={() => setShowMap(true)}>
               VIEW ON MAP
             </Button>
-            {isLoggedIn && <Button to={`/places/${id}`}>EDIT</Button>}
-            {isLoggedIn && (
+            {creator === currentUser?.userId && <Button to={`/places/${id}`}>EDIT</Button>}
+            {creator === currentUser?.userId && (
               <Button onClick={() => setShowConfirmModal(true)} danger={true}>
                 DELETE
               </Button>

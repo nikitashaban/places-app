@@ -2,13 +2,17 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { setIsUserLogged } from "../../../../ducks/users";
+import { setCurrentUser } from "../../../../ducks/users";
 import { RootState } from "../../../../reducers";
 import styles from "./style.module.scss";
 
 const NavLinks: React.FC = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: RootState) => state.users.isLoggedIn);
+  const { currentUser } = useSelector((state: RootState) => state.users);
+  const logoutHandler = () => {
+    dispatch(setCurrentUser(null))
+    localStorage.clear()
+  }
   return (
     <ul className={styles.navLinks}>
       <li>
@@ -17,29 +21,29 @@ const NavLinks: React.FC = () => {
         </NavLink>
       </li>
       <li>
-        {isLoggedIn && (
-          <NavLink activeClassName={styles.activeNavLinks} to="/1/places">
+        {currentUser?.token && (
+          <NavLink activeClassName={styles.activeNavLinks} to={`/${currentUser.userId}/places`}>
             MY PLACES
           </NavLink>
         )}
       </li>
       <li>
-        {isLoggedIn && (
+        {currentUser?.token && (
           <NavLink activeClassName={styles.activeNavLinks} to="/places/new">
             ADD PLACE
           </NavLink>
         )}
       </li>
       <li>
-        {!isLoggedIn && (
+        {!currentUser?.token && (
           <NavLink activeClassName={styles.activeNavLinks} to="/auth">
             AUTHENTICATE
           </NavLink>
         )}
       </li>
-      {isLoggedIn && (
+      {currentUser?.token && (
         <li>
-          <button onClick={() => dispatch(setIsUserLogged(false))}>
+          <button onClick={logoutHandler}>
             LOGOUT
           </button>
         </li>
